@@ -1,10 +1,11 @@
 
 const { prompt } = require("inquirer");
 const db = require("./db/connection");
+const { viewAllDepartments } = require("./db/departments");
 
-const start = () => {
+const start = async () => {
     console.log("Welcome to the Employee Manager!");
-    prompt([
+    const { choice } = await prompt([
         {
             type: "list",
             name: "choice",
@@ -21,6 +22,11 @@ const start = () => {
             ]
         }
     ])
+
+    switch (choice) {
+        case 'View all departments': 
+          console.table(viewAllDepartments());
+    }
 }
 
 start();
