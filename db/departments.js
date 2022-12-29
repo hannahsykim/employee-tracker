@@ -1,7 +1,6 @@
-const { default: inquirer } = require("inquirer");
-const { promise } = require("./connection");
 const db = require("./connection");
-const prompt = require('prompt-sync')();
+const inquirer  = require("inquirer");
+
 
 async function viewAllDepartments() {
     try {
@@ -14,39 +13,46 @@ async function viewAllDepartments() {
 };
 
 async function addDepartment() {
-    await prompt([
+    try{
+        const departments = await viewAllDepartments();
+        const { name } =
+        await inquirer.prompt([
             {
             type: "input",
             name: "name",
             message: "What is the name of the department you would like to add?",
             }
         ])
-    .then((res) => {
-        db.promise().query('INSERT INTO department (name) VALUES (?)', {name: res.name}, (err) => 
-            {
-            if (err) throw err;
-            console.log(`New Department added!`);
-            console.table(res);
-            return departments[0];
-            })      
-    })
-}; 
-    
-
-async function deleteDepartment() {
-    await prompt([
-            {
-            type: "input",
-            name: "name",
-            message: "What is the name of the department you would like to delete?",
-            }
-        ])
-    try {
-        await db.query('DELETE FROM department WHERE ?');
-        return departments[0];
+        await db.query(`INSERT INTO department (name) VALUES ("${ name }")`)   
+        const newDepartments = await viewAllDepartments();
+        return newDepartments[0];
     } catch (err) {
         console.log(err);
-    }  
+    };  
+};
+
+async function deleteDepartment() {
+    try {
+        const departments = await viewAllDepartments();
+        const { id } =
+        await inquirer.prompt([
+            {
+                type: "list",
+                name: "id",
+                message: "What is the name of the department you would like to delete?",
+                choices: departments.map((department) => { 
+                    return {
+                        name: department.name, 
+                        value: department.id 
+                    }
+                })
+            }
+        ])
+        await db.query(`DELETE FROM department WHERE id = ${id}`);
+        return await viewAllDepartments();
+    } catch (err) {
+        console.log(err);
+    };  
 };
 
 

@@ -9,7 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "inquirer": "8.2.4",
+        "inquirer": "^8.2.5",
         "mysql2": "^2.1.0",
         "prompt-sync": "^4.2.0"
     }

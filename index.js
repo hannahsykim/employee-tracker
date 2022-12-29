@@ -30,45 +30,45 @@ const start = async () => {
 
     switch (choice) {
         case 'View all departments': 
-            const ViewDepartments = await viewAllDepartments()
+            const ViewDepartments = await viewAllDepartments();
             console.table(ViewDepartments)
             break;
         case 'Add a department':
-            const AddDepartment = await addDepartment()
+            const AddDepartment = await addDepartment();
             console.table(AddDepartment)
             break;
         case 'Delete a department':
-            const DeleteDepartment = await deleteDepartment()
+            const DeleteDepartment = await deleteDepartment();
             console.table(DeleteDepartment)
             break;
             
         case 'View all roles':
-            const ViewRoles = await viewAllRoles()
+            const ViewRoles = await viewAllRoles();
             console.table(ViewRoles)
             break;         
         case 'Add a role':
-            const AddRole = await addRole()
+            const AddRole = await addRole();
             console.table(AddRole)
             break;
         case 'Delete a role':
-            const DeleteRole = await deleteRole()
+            const DeleteRole = await deleteRole();
             console.table(DeleteRole)
             break;
 
         case 'View all employees':
-            const ViewEmployees = await viewAllEmployees()
+            const ViewEmployees = await viewAllEmployees();
             console.table(ViewEmployees)
             break;
         case 'Add an employee':
-            const AddEmployee = await addEmployee()
+            const AddEmployee = await addEmployee();
             console.table(AddEmployee)
             break;
         case 'Update an employee role':
-            const UpdateEmployee = await updateEmployee()
+            const UpdateEmployee = await updateEmployee();
             console.table(UpdateEmployee)
             break;
         case 'Delete an employee':
-            const DeleteEmployee = await deleteEmployee()
+            const DeleteEmployee = await deleteEmployee();
             console.table(DeleteEmployee)
             break;
 
