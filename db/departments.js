@@ -1,16 +1,18 @@
 const db = require("./connection");
 const inquirer  = require("inquirer");
 
-
 async function viewAllDepartments() {
     try {
         const departments =
         await db.promise().query('SELECT * FROM department');
         return departments[0];
+        
     } catch (err) {
         console.log(err);
     }
 };
+
+
 
 async function addDepartment() {
     try{
@@ -26,10 +28,12 @@ async function addDepartment() {
         await db.query(`INSERT INTO department (name) VALUES ("${ name }")`)   
         const newDepartments = await viewAllDepartments();
         return newDepartments;
+        
     } catch (err) {
         console.log(err);
     };  
 };
+
 
 async function deleteDepartment() {
     try {
@@ -50,6 +54,7 @@ async function deleteDepartment() {
         ])
         await db.query(`DELETE FROM department WHERE id = ${id}`);
         return await viewAllDepartments();
+       
     } catch (err) {
         console.log(err);
     };  

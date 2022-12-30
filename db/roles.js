@@ -2,15 +2,20 @@ const db = require("./connection");
 const inquirer  = require("inquirer");
 const { viewAllDepartments } = require("./departments");
 
+
 async function viewAllRoles() {
     try {
      const roles =
      await db.promise().query('SELECT * FROM role')
-     return roles[0]
+     return roles[0];
+     
+    
     } catch (err) {
         console.log(err);
     }
 }
+
+
 
 async function addRole() {
     try {
@@ -42,10 +47,12 @@ async function addRole() {
         await db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${ title }", "${ salary }", "${ department_id }")`)   
         const newRoles = await viewAllRoles();
         return newRoles;
+        
     } catch (err) {
         console.log(err);
     };  
 };
+
 
 async function deleteRole() {
     try {
@@ -66,6 +73,7 @@ async function deleteRole() {
         ])
         await db.query(`DELETE FROM role WHERE id = ${id}`);
         return await viewAllRoles();
+        
     } catch (err) {
         console.log(err);
     };  

@@ -77,6 +77,8 @@ const start = async () => {
             process.exit()
 
     }
+    start();
 }
 
+console.log("Welcome to the Employee Manager!");
 start();
