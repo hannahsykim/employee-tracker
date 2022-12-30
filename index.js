@@ -3,7 +3,7 @@ const { prompt } = require("inquirer");
 const db = require("./db/connection");
 const { viewAllDepartments, addDepartment, deleteDepartment } = require("./db/departments");
 const { viewAllEmployees, addEmployees, deleteEmployees } = require("./db/employees");
-const { viewAllRoles } = require("./db/roles");
+const { viewAllRoles, addRole, deleteRole } = require("./db/roles");
 
 const start = async () => {
     console.log("Welcome to the Employee Manager!");
