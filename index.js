@@ -2,7 +2,7 @@
 const { prompt } = require("inquirer");
 const db = require("./db/connection");
 const { viewAllDepartments, addDepartment, deleteDepartment } = require("./db/departments");
-const { viewAllEmployees, addEmployees, deleteEmployees } = require("./db/employees");
+const { viewAllEmployees, addEmployees, deleteEmployees, updateEmployeeRole } = require("./db/employees");
 const { viewAllRoles, addRole, deleteRole } = require("./db/roles");
 
 const start = async () => {
@@ -64,7 +64,7 @@ const start = async () => {
             console.table(AddEmployee)
             break;
         case 'Update an employee role':
-            const UpdateEmployee = await updateEmployee();
+            const UpdateEmployee = await updateEmployeeRole();
             console.table(UpdateEmployee)
             break;
         case 'Delete an employee':

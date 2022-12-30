@@ -1,5 +1,6 @@
 const db = require("./connection");
 const inquirer  = require("inquirer");
+const { viewAllDepartments } = require("./departments");
 
 async function viewAllRoles() {
     try {
@@ -12,8 +13,8 @@ async function viewAllRoles() {
 }
 
 async function addRole() {
-    try{
-        const roles = await viewAllRoles();
+    try {
+        const departments = await viewAllDepartments();
         const { title, salary, department_id } =
         await inquirer.prompt([
             {
@@ -27,12 +28,18 @@ async function addRole() {
             message: "What is the salary of your role?",
             },
             {
-            type: "input",
+            type: "list",
             name: "department_id",
-            message: "What is the department_id of your role?",
+            message: "What is the department of your role?",
+            choices: departments.map((department) => {
+                return {
+                    name: department.name,
+                    value: department.id,
+                }
+            })
             }
         ])
-        await db.query(`INSERT INTO role (title) VALUES ("${ title }", salary="${ salary }", department)`)   
+        await db.query(`INSERT INTO role (title, salary, department_id) VALUES ("${ title }", "${ salary }", "${ department_id }")`)   
         const newRoles = await viewAllRoles();
         return newRoles;
     } catch (err) {
@@ -52,7 +59,7 @@ async function deleteRole() {
                 choices: role.map((role) => { 
                     return {
                         name: role.title, 
-                        value: role.department_id
+                        value: role.id
                     }
                 })
             }

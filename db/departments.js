@@ -25,7 +25,7 @@ async function addDepartment() {
         ])
         await db.query(`INSERT INTO department (name) VALUES ("${ name }")`)   
         const newDepartments = await viewAllDepartments();
-        return newDepartments[0];
+        return newDepartments;
     } catch (err) {
         console.log(err);
     };  

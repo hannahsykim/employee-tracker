@@ -5,7 +5,8 @@ const { viewAllRoles } = require("./roles");
 async function viewAllEmployees() {
     try {
      const employees =
-     await db.promise().query('SELECT * FROM employee LEFT JOIN role ON role.id = employee.role_id')
+     await db.query('SELECT * FROM employee LEFT JOIN role ON role.id = employee.role_id')
+     
      return employees;
     } catch (err) {
         console.log(err);
@@ -16,12 +17,21 @@ async function addEmployees() {
     try{
         const roles = await viewAllRoles();
         const employees = await viewAllEmployees();
+        const managers  = 
+        await db.query("SELECT first_name, last_name, id FROM employee WHERE manager_id IS NULL");
+        employees.map((employee) => {
+            return {
+                name: `${employee.first_name}, ${employee.last_name}`,
+                value: employee.id
+            }
+        });
+        console.log(managers);
         const { firstName, lastName, roleId, managerId } =
         await inquirer.prompt([
             {
-            type: "input",
-            name: "firstName",
-            message: "What is the first name of the employee you would like to add?",
+                type: "input",
+                name: "firstName",
+                message: "What is the first name of the employee you would like to add?",
             },
             {
                 type: "input",  
@@ -43,21 +53,10 @@ async function addEmployees() {
                 type: "list",
                 name: "managerId",
                 message: "Who is this employee's manager?",
-                choices: [
-                    ...employees.map((employee) => {
-                        return {
-                            value: employee.id,
-                            name: `${employee.firstName} ${employee.lastName}`
-                        };
-                    }),
-                    {
-                        value: null,
-                        name: "None"
-                    }
-                ]
+                choices: [ { managers }, {name: "None", value: null}]
             }
         ])
-        await db.query(`INSERT INTO employee (first_name) VALUES ("${ firstName }", "${ lastName }"), role_id = ${roleId}, manager_id = ${managerId}`)  
+        await db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${ firstName }", "${ lastName }", ${ roleId }, ${ managerId })`);
 
         const newEmployees = await viewAllEmployees();
         return newEmployees;         
@@ -68,14 +67,14 @@ async function addEmployees() {
 
 async function deleteEmployees() {
     try {
-        const employees = await viewAllEmployees();
+        const newEmployees = await viewAllEmployees();
         const { id } =
         await inquirer.prompt([
             {
                 type: "list",
                 name: "id",
                 message: "What is the name of the employee you would like to delete?",
-                choices: employee.map((employee) => { 
+                choices: newEmployees.map((employee) => { 
                     return {
                         name: `${employee.first_name}, ${employee.last_name}`,
                         value: employee.id 
@@ -84,9 +83,48 @@ async function deleteEmployees() {
             }
         ])
         await db.query(`DELETE FROM employee WHERE id = ${id}`);
+        
         return await viewAllEmployees();
     } catch (err) {
         console.log(err);
     };  
 };
-module.exports = { viewAllEmployees, addEmployees, deleteEmployees };
+
+async function updateEmployeeRole() {
+    try {
+        const employees = await viewAllEmployees();
+        const employeeRoles = await viewAllRoles();
+        const { employee, newRole } = await inquirer.prompt([
+            {
+                type: "list",
+                name: "employee",
+                message: "Which employee's role would you like to update?",
+                choices: employees.map((employee) => {
+                    return {
+                        name: `${employee.first_name}, ${employee.last_name}`,
+                        value: employee.id
+                    };
+                }),
+            },
+            {
+                type: "list",
+                name: "newRole",
+                message: "What is the employee's new role?",
+                choices: employeeRoles.map ((role) => {
+                    return {
+                        name: role.title,
+                        value: role.id
+                    };
+                })
+            }
+        ])
+        await db.query(`UPDATE employee SET role_id = ${newRole} WHERE id = ${employee}`);
+        
+        const updatedEmployeeRole = await viewAllEmployees();
+        return await updatedEmployeeRole;
+    } catch (err){
+        console.log(err)
+    }
+}
+
+module.exports = { viewAllEmployees, addEmployees, deleteEmployees, updateEmployeeRole };
