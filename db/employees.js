@@ -17,16 +17,8 @@ async function addEmployees() {
     try{
         const roles = await viewAllRoles();
         const employees = await viewAllEmployees();
-        const managers  = 
-        await db.query("SELECT first_name, last_name, id FROM employee WHERE manager_id IS NULL");
-        employees.map((employee) => {
-            return {
-                name: `${employee.first_name}, ${employee.last_name}`,
-                value: employee.id
-            }
-        });
-        console.log(managers);
-        const { firstName, lastName, roleId, managerId } =
+    
+        const { firstName, lastName, roleId, manager } =
         await inquirer.prompt([
             {
                 type: "input",
@@ -51,12 +43,20 @@ async function addEmployees() {
             },
             {
                 type: "list",
-                name: "managerId",
+                name: "manager",
                 message: "Who is this employee's manager?",
-                choices: [ { managers }, {name: "None", value: null}]
+                choices: [ 
+                    ...employees.map(employee => {
+                        return {
+                            value: employee.id,
+                            name: `${employee.first_name} ${employee.last_name}`
+                        }
+                    }),
+                    {name: "None", value: null}
+                ]
             }
         ])
-        await db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${ firstName }", "${ lastName }", ${ roleId }, ${ managerId })`);
+        await db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${ firstName }", "${ lastName }", ${ roleId }, ${ manager })`);
 
         const newEmployees = await viewAllEmployees();
         return newEmployees;         
