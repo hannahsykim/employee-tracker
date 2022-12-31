@@ -6,14 +6,13 @@ const { viewAllRoles } = require("./roles");
 async function viewAllEmployees() {
     try {
      const employees =
-     await db.query('SELECT * FROM employee LEFT JOIN role ON role.id = employee.role_id')
-     
+     await db.query('SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, CONCAT (manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role ON role.id = employee.role_id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id')
      return employees;
      
     } catch (err) {
         console.log(err);
-    }
-}
+    };
+};
 
 
 
@@ -74,23 +73,22 @@ async function addEmployees() {
 
 async function deleteEmployees() {
     try {
-        const newEmployees = await viewAllEmployees();
-        const { id } =
+        const currentEmployees = await viewAllEmployees();
+        const {id} =
         await inquirer.prompt([
             {
                 type: "list",
                 name: "id",
                 message: "What is the name of the employee you would like to delete?",
-                choices: newEmployees.map((employee) => { 
+                choices: currentEmployees.map((employee) => { 
                     return {
-                        name: `${employee.first_name}, ${employee.last_name}`,
-                        value: employee.id 
+                        name: `${employee.first_name} ${employee.last_name}`,
+                        value: employee.id
                     }
                 })
             }
         ])
         await db.query(`DELETE FROM employee WHERE id = ${id}`);
-        
         return await viewAllEmployees();
         
     } catch (err) {
@@ -103,6 +101,7 @@ async function deleteEmployees() {
 async function updateEmployeeRole() {
     try {
         const employees = await viewAllEmployees();
+        //console.table(await viewAllEmployees());
         const employeeRoles = await viewAllRoles();
         const { employee, newRole } = await inquirer.prompt([
             {
@@ -120,7 +119,7 @@ async function updateEmployeeRole() {
                 type: "list",
                 name: "newRole",
                 message: "What is the employee's new role?",
-                choices: employeeRoles.map ((role) => {
+                choices: employeeRoles.map((role) => {
                     return {
                         name: role.title,
                         value: role.id
@@ -128,12 +127,12 @@ async function updateEmployeeRole() {
                 })
             }
         ])
+        console.log(employee, newRole);
+
         await db.query(`UPDATE employee SET role_id = ${newRole} WHERE id = ${employee}`);
         
         const updatedEmployeeRole = await viewAllEmployees();
-        return await updatedEmployeeRole;
-       
-
+        return updatedEmployeeRole;
     } catch (err){
         console.log(err)
     }

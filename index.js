@@ -6,7 +6,7 @@ const { viewAllEmployees, addEmployees, deleteEmployees, updateEmployeeRole } = 
 const { viewAllRoles, addRole, deleteRole } = require("./db/roles");
 
 const start = async () => {
-    console.log("Welcome to the Employee Manager!");
+    //console.log("Welcome to the Employee Manager!");
     const { choice } = await prompt([
         {
             type: "list",

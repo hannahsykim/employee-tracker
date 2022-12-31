@@ -6,14 +6,13 @@ const { viewAllDepartments } = require("./departments");
 async function viewAllRoles() {
     try {
      const roles =
-     await db.promise().query('SELECT * FROM role')
-     return roles[0];
-     
-    
+     await db.query('SELECT role.id, role.title, role.salary, department.name AS department FROM role LEFT JOIN department ON role.department_id = department.id')
+     return roles;
+
     } catch (err) {
         console.log(err);
-    }
-}
+    };
+};
 
 
 
@@ -56,14 +55,14 @@ async function addRole() {
 
 async function deleteRole() {
     try {
-        const role = await viewAllRoles();
+        const CurrentRole = await viewAllRoles();
         const { id } =
         await inquirer.prompt([
             {
                 type: "list",
                 name: "id",
                 message: "What is the title of the role you would like to delete?",
-                choices: role.map((role) => { 
+                choices: CurrentRole.map((role) => { 
                     return {
                         name: role.title, 
                         value: role.id
