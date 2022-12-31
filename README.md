@@ -5,7 +5,6 @@
 
   ## Table of content: 
   - [Description](#description)
-  - [Visual](#visual)
   - [Installation](#installation)
   - [Usage](#usage)
   - [Contribution](#contribution)
@@ -13,17 +12,17 @@
   - [Questions](#questions)
 
   ## Description <a id="description"></a>
-  An Express.js application that allows users to write, save, and delete notes. This application uses an Express.js back end and will save and retrieve note data from a JSON file.
+  A command-line application that manages a company's employee database, using Node.js, Inquirer, and MySQL.
 
-Walkthrough video: 
-  ## Visual <a id="visual"></a>
- ![Screen Shot 2022-12-17 at 12 22 57 PM](https://user-images.githubusercontent.com/113808775/208267557-d9c5bca9-5ad9-43f2-b355-938a67c2a289.png)
+  This application allows the users to view, add, delete, and update employees, roles, and departments. It also allows the users to view all the employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to.
+
+  [Walkthrough Video](https://youtu.be/UcPtdJWbXK4)
 
   ## Installation <a id="installation"></a>
-  Clone the repository to your system, then install npm into your command line. Make sure you have node installed.
+  Clone the repository to your system, then install npm into your command line. Make sure you have inquirer installed by typing npm i inquirer@8.2.4.
 
   ## Usage <a id="usage"></a>
-  Once you installed npm into your command line, run node server.js and go to localhost:3000 in your browser. You can write, save, and delete notes.
+  Once you installed npm inquirer into your command line, run node server.js and follow the prompts to view, add, delete or update employees, roles, and departments.
 
   ## Contribution <a id="contribution"></a>
   Feel free to contribute by making a pull request.
@@ -31,5 +30,5 @@ Walkthrough video:
   licensed under the [ISC](https://opensource.org/licenses/ISC) license
   ## Questions <a id="questions"></a>
   Email: hanhannah839@gmail.com
-  Github: hannahsykim
+  <br>github: [hannahsykim](https://github.com/hannahsykim/)
   
